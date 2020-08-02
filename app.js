@@ -1,7 +1,7 @@
 const express = require('express');
 const fs = require('fs');
 const bodyParser = require("body-parser");
-const Joi = require('joi'); //used for validation
+//const Joi = require('joi'); //used for validation
 const { json } = require('body-parser');
 const app = express();
 app.use(express.json());
@@ -27,6 +27,7 @@ app.get('/api/books', (req, res) => {
     })
 });
 
+
 app.get('/api/books/:id', (req, res) => {
 
     const dataBuffer = fs.readFileSync(dataPath)
@@ -34,8 +35,6 @@ app.get('/api/books/:id', (req, res) => {
     const book = data1.find(c => c.id == req.params.id);
     if (!book) res.status(404).send('<h2 style="font-family: Malgun Gothic; color: darkred;">Ooops... Cant find what you are looking for!</h2>');
     res.send(book);
-
-    //console.log(book)
 });
 
 
@@ -53,35 +52,19 @@ app.post('/api/books', (req, res) => {
     fs.writeFileSync(dataPath, JSON.stringify(data1))
     res.send(JSON.stringify(data1) + "\nSaved")
 
-    // //console.log(books[books.length-1].id)
-    // for(let i=0;i<books.length;i++){
-    //     //console.log(books[i].id)
-    //     if(books[i].title===req.body.title){
-    //         res.send('<h2>title already taken</h2>')
-    //         return
-    //     }
-    // }
-    // books.push({"id":books[books.length-1].id + 1,"title": req.body.title});
-    //     res.send(books);
-    //PostgreSQL,grephQL
-
 });
 
 //UPDATE Request Handler
 app.put('/api/books/:id', (req, res) => {
     
-
-    const dataBuffer = fs.readFileSync(dataPath)
+	const dataBuffer = fs.readFileSync(dataPath)
     const data1 = JSON.parse(dataBuffer)
     const book = data1.find(c => c.id == req.params.id)
     if (!book) res.status(404).send('<h2 style="font-family: Malgun Gothic; color: darkred;"> Not Found!! </h2>');
     book.title=req.body.title
     fs.writeFileSync(dataPath, JSON.stringify(data1))
     res.send(data1)
-    // const book = books.find(c => c.id === parseInt(req.params.id));
-    // if (!book) res.status(404).send('<h2 style="font-family: Malgun Gothic; color: darkred;">Not Found!! </h2>');
-    // book.title = req.body.title;
-    // res.send(books);
+    
 });
 
 //DELETE Request Handler
